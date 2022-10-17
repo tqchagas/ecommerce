@@ -12,7 +12,6 @@ function HomeScreen() {
                 {products.map(product => (
                     <Col key={product._id}>
                         <Product product={product} />
-                        <h3>{product.name}</h3>
                     </Col>
                 ))}
             </Row>
