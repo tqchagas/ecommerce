@@ -1,13 +1,23 @@
-import React from 'react'
-import {Row, Col, Image, ListGroup, ListGroupItem, Button, Card} from 'react-bootstrap'
+import React, {useState, useEffect} from 'react'
+import {Row, Col, Image, ListGroup, ListGroupItem, Button} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
-import products from '../products'
+
+import axios from 'axios'
 
 import { useParams } from "react-router-dom";
 
 function ProductScreen() {
     let { id } = useParams(); 
-    const product = products.find((p) => p._id == id)
+    
+    const [product, setProduct] = useState([])
+
+    useEffect(() => {
+        async function fetchProduct(){
+            const {data} = await axios.get(`/api/products/${id}`)
+            setProduct(data);
+        }
+        fetchProduct()
+    })
 
     return (
          <div>
@@ -23,12 +33,12 @@ function ProductScreen() {
                         </ListGroupItem>
                         <ListGroupItem>
                             <h3>Price: ${product.price}</h3>
-                            {product.countInStock > 0 ? 'In stock' : 'Out of stock'}
+                            {product.count_in_stock > 0 ? 'In stock' : 'Out of stock'}
                         </ListGroupItem>
                         <ListGroupItem>
                             <Button 
                                 className="btn-block" type="button"
-                                disabled={product.countInStock == 0}
+                                disabled={product.count_in_stock === 0}
                             >
                                 Add to cart
                             </Button>
