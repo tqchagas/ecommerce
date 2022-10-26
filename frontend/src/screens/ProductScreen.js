@@ -1,25 +1,23 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect} from 'react'
 import {Row, Col, Image, ListGroup, ListGroupItem, Button} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 
-import axios from 'axios'
-
 import { useParams } from "react-router-dom";
 
+import {useDispatch, useSelector} from 'react-redux'
+import {listProductDetails} from '../actions/productionActions'
+
 function ProductScreen() {
-    let { id } = useParams(); 
-    
-    const [product, setProduct] = useState([])
+    const dispatch = useDispatch()
+    let { id } = useParams()
+    const productDetails = useSelector(state => state.productDetails)
+    const { error, loading, product } = productDetails
 
     useEffect(() => {
-        async function fetchProduct(){
-            const {data} = await axios.get(`/api/products/${id}`)
-            setProduct(data);
-        }
-        fetchProduct()
-    })
+        dispatch(listProductDetails(id))
+    },[])
 
-    return (
+return (
          <div>
              <Link to='/' className='btn btn-light'>Go Back</Link>
              <Row>
